@@ -2,15 +2,14 @@ from app import db
 # from datetime import datetime
 
 class Task(db.Model):
-    task_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String)
-    # completed_at = db.Column(db.DateTime, nullable=True)
+    is_complete = db.Column(db.Boolean, nullable=True)
     
     
 
     def to_dict(self):
-        task_as_dict = {"task_id": self.task_id, "title": self.title} 
-        # , "completed_at": self.completed_at}
+        task_as_dict = {"id": self.id, "title": self.title, "is_complete": self.is_complete}
 
         return task_as_dict
 

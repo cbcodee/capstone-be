@@ -24,7 +24,9 @@ def validate_model(cls, model_id):
 @task_bp.route("", methods=["POST"])
 def create_task():
     request_body = request.get_json()
+    
     new_task = Task.from_dict(request_body)
+    
 
     db.session.add(new_task)
     db.session.commit()
@@ -47,7 +49,7 @@ def create_task():
 
 @task_bp.route("", methods=["GET"])
 def list_all_tasks():
-    tasks = Task.query.all()
+    tasks = Task.query.order_by(Task.id).all()
 
     tasks_response = [task.to_dict() for task in tasks]
 
@@ -55,15 +57,37 @@ def list_all_tasks():
 
 
 
-@task_bp.route("/<task_id>", methods=["DELETE"])
-def delete_task(task_id):
-    task = validate_model(Task, task_id)
+@task_bp.route("/<id>", methods=["DELETE"])
+def delete_task(id):
+    task = validate_model(Task, id)
     
 
     db.session.delete(task)
     db.session.commit()
 
-    return {"details": f'Task {task.task_id} "{task.title}" successfully deleted'}
+    return {"details": f'Task {task.id} "{task.title}" successfully deleted'}
+
+@task_bp.route("/<id>/mark_complete", methods=["PATCH"])
+def complete_task_with_id(id):
+    task = validate_model(Task, id)
+
+    task.is_complete = True
+
+    db.session.commit()
+
+    return jsonify(task.to_dict())
+
+@task_bp.route("/<id>/mark_incomplete", methods=["PATCH"])
+def incomplete_task_with_id(id):
+    task = validate_model(Task, id)
+
+    task.is_complete = False
+
+    db.session.commit()
+
+    return jsonify(task.to_dict())
+
+
 
 
 

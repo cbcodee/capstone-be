@@ -3,6 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 
 db = SQLAlchemy()
@@ -11,26 +12,28 @@ load_dotenv()
 
 
 def create_app(test_config=None):
-    app = Flask(__name__)
-    
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-            "SQLALCHEMY_DATABASE_URI")
-    # else:
-    #     app.config["TESTING"] = True
-    #     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    #     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
-    #         "SQLALCHEMY_TEST_DATABASE_URI")
+        app = Flask(__name__)
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+                "SQLALCHEMY_DATABASE_URI")
+        # else:
+        #     app.config["TESTING"] = True
+        #     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+        #     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get(
+        #         "SQLALCHEMY_TEST_DATABASE_URI")
 
-    db.init_app(app)
-    migrate.init_app(app, db)
-    
-    # Import models here for Alembic setup
-    from app.models.task import Task
+        db.init_app(app)
+        migrate.init_app(app, db)
+        
+        # Import models here for Alembic setup
+        from app.models.task import Task
 
-    # Register Blueprints here
-    
-    from .routes import task
-    app.register_blueprint(task.task_bp)
+        # Register Blueprints here
+        
+        from .routes import task
+        app.register_blueprint(task.task_bp)
 
-    return app
+
+        app.config['CORS_HEADERS'] = 'Content-Type'
+        CORS(app)
+        return app
