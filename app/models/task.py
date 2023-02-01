@@ -4,7 +4,7 @@ from app import db
 class Task(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String)
-    is_complete = db.Column(db.Boolean, nullable=True)
+    is_complete = db.Column(db.Boolean, nullable=False, default=False)
     
     
 
@@ -18,6 +18,12 @@ class Task(db.Model):
         new_task = cls(title=task_data["title"])
 
         return new_task
+
+
+
+
+
+
 
         # return cls(title=task_data["title"])
         #                 # description=task_data["description"])

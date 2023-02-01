@@ -26,7 +26,7 @@ def create_task():
     request_body = request.get_json()
     
     new_task = Task.from_dict(request_body)
-    
+    print(new_task)
 
     db.session.add(new_task)
     db.session.commit()
@@ -67,7 +67,7 @@ def delete_task(id):
 
     return {"details": f'Task {task.id} "{task.title}" successfully deleted'}
 
-@task_bp.route("/<id>/mark_complete", methods=["PATCH"])
+@task_bp.route("/<id>/mark-complete", methods=["PATCH"])
 def complete_task_with_id(id):
     task = validate_model(Task, id)
 
@@ -77,7 +77,7 @@ def complete_task_with_id(id):
 
     return jsonify(task.to_dict())
 
-@task_bp.route("/<id>/mark_incomplete", methods=["PATCH"])
+@task_bp.route("/<id>/mark-incomplete", methods=["PATCH"])
 def incomplete_task_with_id(id):
     task = validate_model(Task, id)
 
