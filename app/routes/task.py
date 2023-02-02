@@ -26,14 +26,28 @@ def create_task():
     request_body = request.get_json()
     
     new_task = Task.from_dict(request_body)
-    print(new_task)
+    
 
     db.session.add(new_task)
     db.session.commit()
 
-    task_dict = new_task.to_dict()
 
-    return make_response(jsonify({"task": task_dict}), 201)
+    return jsonify(new_task.to_dict()), 201
+
+# @task_bp.route("", methods=["POST"])
+# def create_task():
+#     request_body = request.get_json()
+    
+#     new_task = Task.from_dict(request_body)
+    
+
+#     db.session.add(new_task)
+#     db.session.commit()
+
+#     task_dict = new_task.to_dict()
+
+#     return make_response(jsonify({"task": task_dict}), 201)
+
 
 
     # try:
@@ -54,6 +68,14 @@ def list_all_tasks():
     tasks_response = [task.to_dict() for task in tasks]
 
     return jsonify(tasks_response), 200
+
+
+@task_bp.route("", methods=["GET"])
+def handle_task():
+    task = validate_model(Task, id)
+
+    return jsonify(task.to_dict()), 200
+
 
 
 
