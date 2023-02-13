@@ -20,12 +20,12 @@ def validate_model(cls, model_id):
     return model
 
 
-# new_task = Task.from_dict(request_body)
+
 @task_bp.route("", methods=["POST"])
 def create_task():
     request_body = request.get_json()
     
-    new_task = Task.from_dict(request_body)
+    new_task = Task.from_dict({"user_id": request_body["user_id"]})
     
 
     db.session.add(new_task)
@@ -34,31 +34,6 @@ def create_task():
 
     return jsonify(new_task.to_dict()), 201
 
-# @task_bp.route("", methods=["POST"])
-# def create_task():
-#     request_body = request.get_json()
-    
-#     new_task = Task.from_dict(request_body)
-    
-
-#     db.session.add(new_task)
-#     db.session.commit()
-
-#     task_dict = new_task.to_dict()
-
-#     return make_response(jsonify({"task": task_dict}), 201)
-
-
-
-    # try:
-    #     new_task = Task.from_dict(request_body)
-    # except KeyError:
-    #     abort(make_response({"details": "Invalid data"}, 400))
-
-    # db.session.add(new_task)
-    # db.session.commit()
-
-    # return make_response(jsonify({'task': new_task.to_dict()}), 201)
 
 
 @task_bp.route("", methods=["GET"])
